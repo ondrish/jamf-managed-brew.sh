@@ -1,29 +1,29 @@
 #!/bin/bash
 
-function askForCaskName ()
+function askForAPPNAME ()
 {
 ## Capture the user input into a variable
-CASKNAME=$(/usr/bin/osascript << EOF 
+APPNAME=$(/usr/bin/osascript << EOF 
 tell application "System Events"
     activate
-    display dialog "write name of Cask. " default answer ""
+    display dialog "write name of Program. " default answer ""
     set appName to text returned of result
 end tell
 EOF)
 
 ## Check the variable to make sure it's not empty...
-if [ "$CASKNAME" == "" ]; then
-    echo "Cask name was not entered. Re prompting the user..."
-    askForCaskName
+if [ "$APPNAME" == "" ]; then
+    echo "Program name was not entered. Re prompting the user..."
+    askForAPPNAME
 else
-    echo "Cask name entered was: $Caskname"
+    echo "Program name entered was: $APPNAME"
 fi
 }
 
 #######################
 # check something set #
-if [[ "$CASKNAME" == "" ]]; then
-echo "****  No CASKNAME set! exiting ****"
+if [[ "$APPNAME" == "" ]]; then
+echo "****  No APPNAME set! exiting ****"
 exit 1
 fi
 
@@ -31,7 +31,7 @@ UNAME_MACHINE="$(uname -m)"
 
 ConsoleUser=$( scutil <<< "show State:/Users/ConsoleUser" | awk '/Name :/ && ! /loginwindow/ { print $3 }' )
 
-# Check if the CASKNAME is already installed. If not, install it
+# Check if the APPNAME is already installed. If not, install it
 
 if [[ "$UNAME_MACHINE" == "arm64" ]]; then
     # M1/arm64 machines
@@ -42,9 +42,9 @@ else
 fi
 
 cd /tmp/ # This is required to use sudo as another user or you get a getcwd error
-if [[ $(sudo -H -iu ${ConsoleUser} ${brew} info ${CASKNAME}) != *Not\ installed* ]]; then
-	echo "${CASKNAME} is installed already. Skipping installation"
+if [[ $(sudo -H -iu ${ConsoleUser} ${brew} info ${APPNAME}) != *Not\ installed* ]]; then
+	echo "${APPNAME} is installed already. Skipping installation"
 else
-	echo "${CASKNAME} is either not installed or not available. Attempting installation..."
-	sudo -H -iu ${ConsoleUser} ${brew} install ${CASKNAME}
+	echo "${APPNAME} is either not installed or not available. Attempting installation..."
+	sudo -H -iu ${ConsoleUser} ${brew} install ${APPNAME}
 fi
