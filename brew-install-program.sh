@@ -1,29 +1,11 @@
 #!/bin/bash
 
-function askForAPPNAME ()
-{
-## Capture the user input into a variable
-APPNAME=$(/usr/bin/osascript << EOF 
-tell application "System Events"
-    activate
-    display dialog "write name of Program. " default answer ""
-    set appName to text returned of result
-end tell
-EOF)
-
-## Check the variable to make sure it's not empty...
-if [ "$APPNAME" == "" ]; then
-    echo "Program name was not entered. Re prompting the user..."
-    askForAPPNAME
-else
-    echo "Program name entered was: $APPNAME"
-fi
-}
+ProgramName=$(osascript -e 'text returned of ( display dialog "Please provide Program Name" with title "Homebrew - Install Program" default answer "Program Name" buttons {"OK"} default button button 1 )')
 
 #######################
 # check something set #
-if [[ "$APPNAME" == "" ]]; then
-echo "****  No APPNAME set! exiting ****"
+if [[ "$ProgramName" == "" ]]; then
+echo "****  No ProgramName set! exiting ****"
 exit 1
 fi
 
@@ -42,9 +24,9 @@ else
 fi
 
 cd /tmp/ # This is required to use sudo as another user or you get a getcwd error
-if [[ $(sudo -H -iu ${ConsoleUser} ${brew} info ${APPNAME}) != *Not\ installed* ]]; then
-	echo "${APPNAME} is installed already. Skipping installation"
+if [[ $(sudo -H -iu ${ConsoleUser} ${brew} info ${ProgramName}) != *Not\ installed* ]]; then
+	echo "${ProgramName} is installed already. Skipping installation"
 else
-	echo "${APPNAME} is either not installed or not available. Attempting installation..."
-	sudo -H -iu ${ConsoleUser} ${brew} install ${APPNAME}
+	echo "${ProgramName} is either not installed or not available. Attempting installation..."
+	sudo -H -iu ${ConsoleUser} ${brew} install ${ProgramName}
 fi
