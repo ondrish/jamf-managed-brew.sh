@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ProgramName=$(osascript -e 'text returned of ( display dialog "Please provide Program Name" with title "Homebrew - Install Program" default answer "Program Name" buttons {"OK"} default button button 1 )')
+ProgramName=$(osascript -e 'text returned of (display dialog "Please provide Program Name" with title "Homebrew - Install Program" default answer "Program Name" buttons {"OK"} default button 1)')
 
 #######################
 # check something set #
